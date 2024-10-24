@@ -1,6 +1,5 @@
 import { INestApplication } from "@nestjs/common";
-import { getTestModule } from "../test.module";
-import { DataSource } from "typeorm";
+import { cleanUp, getTestModule } from "../test.module";
 import * as request from 'supertest';
 import { UserPermission } from "../../src/auth/models/user-permission.entity";
 import { User } from "../../src/auth/models/user.entity";
@@ -25,10 +24,7 @@ describe('UserController', () => {
 	});
 
 	afterAll(async () => {
-		const connection = app.get(DataSource);
-		await connection.dropDatabase();
-		await connection.destroy();
-		await app.close();
+		await cleanUp(app);
 	});
 
 	describe('GET /user', () => {
